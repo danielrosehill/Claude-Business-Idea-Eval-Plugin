@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Batch Ranking Report",
+  "description": "Schema for comparative ranking reports across multiple evaluated ideas",
+  "type": "object",
+  "required": [
+    "batch_id",
+    "evaluation_date",
+    "evaluation_mode",
+    "ideas_evaluated",
+    "total_ideas",
+    "ranked_ideas",
+    "tier_summary",
+    "executive_summary"
+  ],
+  "properties": {
+    "batch_id": {
+      "type": "string",
+      "pattern": "^batch-\\d{8}-\\d{6}$",
+      "description": "Unique batch identifier (batch-YYYYMMDD-HHMMSS)"
+    },
+    "evaluation_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evaluation_mode": {
+      "type": "string",
+      "enum": ["single", "council", "rank-only"],
+      "description": "How the ideas were evaluated before ranking"
+    },
+    "ideas_evaluated": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 2,
+      "description": "Names of all ideas included in this ranking"
+    },
+    "total_ideas": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "ranked_ideas": {
+      "type": "array",
+      "description": "Ideas ordered by rank (1 = best)",
+      "items": {
+        "type": "object",
+        "required": [
+          "rank",
+          "tier",
+          "name",
+          "icec_score",
+          "analysis_file"
+        ],
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["pursue_now", "explore_further", "park", "drop"]
+          },
+          "name": {
+            "type": "string"
+          },
+          "icec_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "risk_adjusted_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Score adjusted for downside risk severity"
+          },
+          "analysis_file": {
+            "type": "string",
+            "pattern": "^output/analysis/.*\\.json$"
+          },
+          "strengths_vs_field": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "What this idea does better than the others in this batch"
+          },
+          "weaknesses_vs_field": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Where this idea falls short relative to the others"
+          },
+          "best_paired_with": {
+            "type": "string",
+            "description": "Name of the idea this one complements best in a portfolio"
+          },
+          "time_to_value": {
+            "type": "string",
+            "description": "Estimated time to first meaningful revenue or validation"
+          },
+          "resource_requirement": {
+            "type": "string",
+            "enum": ["minimal", "low", "moderate", "high", "very_high"],
+            "description": "Relative resource requirement compared to the batch"
+          }
+        }
+      }
+    },
+    "tier_summary": {
+      "type": "object",
+      "required": ["pursue_now", "explore_further", "park", "drop"],
+      "properties": {
+        "pursue_now": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "explore_further": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "park": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "drop": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "pairwise_comparisons": {
+      "type": "array",
+      "description": "Comparison between each pair of adjacently-ranked ideas",
+      "items": {
+        "type": "object",
+        "required": [
+          "higher_ranked",
+          "lower_ranked",
+          "score_gap",
+          "key_differentiator",
+          "close_call"
+        ],
+        "properties": {
+          "higher_ranked": {
+            "type": "string"
+          },
+          "lower_ranked": {
+            "type": "string"
+          },
+          "score_gap": {
+            "type": "number",
+            "minimum": 0
+          },
+          "key_differentiator": {
+            "type": "string",
+            "description": "Primary reason the higher-ranked idea wins"
+          },
+          "close_call": {
+            "type": "boolean",
+            "description": "True if score gap <= 0.3 or ranking could reasonably go either way"
+          },
+          "scenario_where_lower_wins": {
+            "type": "string",
+            "description": "Conditions under which the lower-ranked idea would rank higher"
+          }
+        }
+      }
+    },
+    "portfolio_analysis": {
+      "type": "object",
+      "description": "Analysis of how ideas work together as a portfolio",
+      "properties": {
+        "recommended_combination": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Best subset of ideas to pursue simultaneously"
+        },
+        "combination_rationale": {
+          "type": "string"
+        },
+        "diversification_notes": {
+          "type": "string",
+          "description": "How the recommended combination spreads risk"
+        },
+        "total_resource_estimate": {
+          "type": "string",
+          "description": "Aggregate resource requirement for the recommended combination"
+        },
+        "overlap_warnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "idea_a": { "type": "string" },
+              "idea_b": { "type": "string" },
+              "overlap_type": { "type": "string" }
+            }
+          },
+          "description": "Pairs of ideas that compete for the same resources or market"
+        }
+      }
+    },
+    "executive_summary": {
+      "type": "string",
+      "minLength": 100,
+      "description": "2-3 paragraph summary of the ranking results and key takeaways"
+    }
+  }
+}

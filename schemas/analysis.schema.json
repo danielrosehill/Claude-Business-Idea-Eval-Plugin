@@ -1,0 +1,573 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Business Idea Analysis",
+  "description": "Schema for individual business idea ICEC analysis documents",
+  "type": "object",
+  "required": [
+    "idea_name",
+    "idea_summary",
+    "analysis_date",
+    "scores",
+    "total_score",
+    "classification",
+    "detailed_analysis",
+    "recommendation"
+  ],
+  "properties": {
+    "idea_name": {
+      "type": "string",
+      "description": "Human-readable abbreviated name for the business idea",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "idea_summary": {
+      "type": "string",
+      "description": "Two sentence summary of the business idea",
+      "minLength": 10
+    },
+    "analysis_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when the analysis was performed"
+    },
+    "idea_file_path": {
+      "type": "string",
+      "description": "Relative path to the original idea markdown file"
+    },
+    "scores": {
+      "type": "object",
+      "required": ["impact", "confidence", "ease", "contextual_suitability"],
+      "properties": {
+        "impact": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Impact score (1-10): How large the potential upside is"
+            },
+            "reasoning": {
+              "type": "string",
+              "description": "Explanation of the impact score",
+              "minLength": 50
+            }
+          }
+        },
+        "confidence": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Confidence score (1-10): Certainty that idea addresses real problem"
+            },
+            "reasoning": {
+              "type": "string",
+              "description": "Explanation of the confidence score",
+              "minLength": 50
+            }
+          }
+        },
+        "ease": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Ease score (1-10): How easy to implement technically and operationally"
+            },
+            "reasoning": {
+              "type": "string",
+              "description": "Explanation of the ease score",
+              "minLength": 50
+            }
+          }
+        },
+        "contextual_suitability": {
+          "type": "object",
+          "required": ["score", "reasoning", "context_factors"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Contextual Suitability score (1-10): Alignment with user's circumstances"
+            },
+            "reasoning": {
+              "type": "string",
+              "description": "Explanation of the contextual suitability score",
+              "minLength": 50
+            },
+            "context_factors": {
+              "type": "object",
+              "description": "Breakdown of how specific user context factors influenced the score",
+              "properties": {
+                "financial_alignment": {
+                  "type": "string",
+                  "description": "How idea aligns with user's financial situation"
+                },
+                "life_stage_alignment": {
+                  "type": "string",
+                  "description": "How idea fits with user's life stage and responsibilities"
+                },
+                "geographic_alignment": {
+                  "type": "string",
+                  "description": "How user's location supports or hinders the idea"
+                },
+                "skills_alignment": {
+                  "type": "string",
+                  "description": "How idea matches user's skills and experience"
+                },
+                "infrastructure_alignment": {
+                  "type": "string",
+                  "description": "Availability of needed tools and infrastructure"
+                },
+                "motivation_alignment": {
+                  "type": "string",
+                  "description": "How idea aligns with user's goals and passions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "total_score": {
+      "type": "object",
+      "required": ["value", "formula_used"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Final ICEC score"
+        },
+        "formula_used": {
+          "type": "string",
+          "enum": ["equal_weight", "weighted"],
+          "description": "Which formula was used to calculate the score"
+        },
+        "calculation": {
+          "type": "string",
+          "description": "Mathematical breakdown of how the score was calculated"
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "strong_candidate",
+        "worth_exploring",
+        "low_priority",
+        "do_not_pursue"
+      ],
+      "description": "Overall classification based on score ranges"
+    },
+    "detailed_analysis": {
+      "type": "object",
+      "properties": {
+        "market_research": {
+          "type": "string",
+          "description": "Summary of market research conducted"
+        },
+        "competitive_landscape": {
+          "type": "string",
+          "description": "Analysis of existing competitors and solutions"
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Key risks identified"
+        },
+        "opportunities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Key opportunities identified"
+        }
+      }
+    },
+    "extended_analysis": {
+      "type": "object",
+      "description": "Comprehensive qualitative analysis dimensions beyond ICEC scores",
+      "properties": {
+        "commercial_viability": {
+          "type": "object",
+          "properties": {
+            "assessment": {
+              "type": "string",
+              "enum": ["high", "medium", "low", "unknown"],
+              "description": "Overall commercial viability level"
+            },
+            "narrative": {
+              "type": "string",
+              "description": "2-3 paragraph qualitative analysis of commercial viability",
+              "minLength": 100
+            },
+            "revenue_model": {
+              "type": "string",
+              "description": "Description of how revenue will be generated"
+            },
+            "sustainability_outlook": {
+              "type": "string",
+              "description": "Assessment of long-term business sustainability"
+            }
+          }
+        },
+        "competitive_analysis": {
+          "type": "object",
+          "properties": {
+            "competition_level": {
+              "type": "string",
+              "enum": ["crowded", "moderate", "sparse", "emerging"],
+              "description": "Level of competition in the space"
+            },
+            "key_competitors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Competitor name"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Brief description of competitor"
+                  },
+                  "market_position": {
+                    "type": "string",
+                    "description": "Their position and strength in market"
+                  }
+                }
+              },
+              "description": "List of 3-5 main competitors"
+            },
+            "differentiation_opportunity": {
+              "type": "string",
+              "description": "Analysis of how this idea can differentiate",
+              "minLength": 100
+            },
+            "competitive_threats": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Key competitive risks"
+            }
+          }
+        },
+        "novelty_assessment": {
+          "type": "object",
+          "properties": {
+            "novelty_level": {
+              "type": "string",
+              "enum": ["novel", "incremental_innovation", "existing_but_improved", "saturated"],
+              "description": "How novel is this idea"
+            },
+            "existing_solutions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "solution": {
+                    "type": "string",
+                    "description": "Name or description of existing solution"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "How it works and what it offers"
+                  }
+                }
+              },
+              "description": "List of existing solutions in the space"
+            },
+            "innovation_analysis": {
+              "type": "string",
+              "description": "Assessment of what's genuinely new or improved",
+              "minLength": 100
+            }
+          }
+        },
+        "implementation_timeline": {
+          "type": "object",
+          "properties": {
+            "mvp_timeline": {
+              "type": "object",
+              "properties": {
+                "estimate": {
+                  "type": "string",
+                  "description": "Time estimate (e.g., '3-4 months')"
+                },
+                "assumptions": {
+                  "type": "string",
+                  "description": "Key assumptions behind estimate"
+                }
+              }
+            },
+            "first_revenue_timeline": {
+              "type": "object",
+              "properties": {
+                "estimate": {
+                  "type": "string",
+                  "description": "Time estimate to first paying customer"
+                },
+                "dependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "What must happen first"
+                }
+              }
+            },
+            "key_milestones": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "milestone": {
+                    "type": "string",
+                    "description": "Milestone description"
+                  },
+                  "timeframe": {
+                    "type": "string",
+                    "description": "Expected timeframe"
+                  }
+                }
+              }
+            },
+            "critical_path": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Items that must happen sequentially"
+            }
+          }
+        },
+        "funding_analysis": {
+          "type": "object",
+          "properties": {
+            "recommended_model": {
+              "type": "string",
+              "enum": ["bootstrap", "angel", "vc", "hybrid", "grant_funded", "revenue_funded"],
+              "description": "Recommended funding approach"
+            },
+            "capital_requirements": {
+              "type": "object",
+              "properties": {
+                "startup_capital": {
+                  "type": "string",
+                  "description": "Initial capital needed to start"
+                },
+                "runway_to_revenue": {
+                  "type": "string",
+                  "description": "Estimated capital needed until first revenue"
+                },
+                "runway_to_sustainability": {
+                  "type": "string",
+                  "description": "Estimated capital needed until self-sustaining"
+                }
+              }
+            },
+            "potential_funders": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Specific suggestions for funding sources"
+            },
+            "financial_risk_level": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "very_high"],
+              "description": "Overall financial risk assessment"
+            }
+          }
+        },
+        "market_strategy": {
+          "type": "object",
+          "properties": {
+            "primary_target_market": {
+              "type": "string",
+              "description": "Description of primary target market with rationale",
+              "minLength": 100
+            },
+            "distribution_strategy": {
+              "type": "string",
+              "description": "2-3 paragraph plan for reaching customers",
+              "minLength": 100
+            },
+            "geographic_focus": {
+              "type": "string",
+              "description": "Where to start and why"
+            },
+            "market_entry_risks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Key challenges to reaching customers"
+            }
+          }
+        },
+        "validation_strategy": {
+          "type": "object",
+          "properties": {
+            "prototype_approach": {
+              "type": "string",
+              "description": "Specific actionable plan for building first prototype",
+              "minLength": 100
+            },
+            "validation_experiments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "experiment": {
+                    "type": "string",
+                    "description": "Description of validation test"
+                  },
+                  "hypothesis": {
+                    "type": "string",
+                    "description": "What this test will validate"
+                  },
+                  "success_criteria": {
+                    "type": "string",
+                    "description": "What results indicate success"
+                  }
+                }
+              },
+              "description": "3-5 concrete tests to run"
+            },
+            "feasibility_questions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Key unknowns to research"
+            }
+          }
+        },
+        "implementation_difficulty": {
+          "type": "object",
+          "properties": {
+            "overall_difficulty": {
+              "type": "string",
+              "enum": ["very_low", "low", "medium", "high", "very_high"],
+              "description": "Overall execution difficulty"
+            },
+            "hardest_challenges": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "challenge": {
+                    "type": "string",
+                    "description": "Challenge description"
+                  },
+                  "impact": {
+                    "type": "string",
+                    "description": "Why this is difficult"
+                  }
+                }
+              },
+              "description": "Top 3-5 obstacles"
+            },
+            "skill_gaps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "What user needs to learn or hire for"
+            },
+            "mitigation_strategies": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "How to reduce difficulty"
+            }
+          }
+        }
+      }
+    },
+    "global_score": {
+      "type": "object",
+      "description": "Optional comprehensive score incorporating qualitative dimensions",
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Global comprehensive score (1-10)"
+        },
+        "calculation_breakdown": {
+          "type": "object",
+          "properties": {
+            "icec_component": {
+              "type": "number",
+              "description": "ICEC contribution to global score"
+            },
+            "viability_component": {
+              "type": "number",
+              "description": "Commercial viability contribution"
+            },
+            "competition_component": {
+              "type": "number",
+              "description": "Competitive landscape contribution"
+            },
+            "novelty_component": {
+              "type": "number",
+              "description": "Novelty contribution"
+            },
+            "difficulty_component": {
+              "type": "number",
+              "description": "Difficulty contribution (inverted)"
+            },
+            "funding_component": {
+              "type": "number",
+              "description": "Funding feasibility contribution"
+            }
+          }
+        },
+        "divergence_from_icec": {
+          "type": "string",
+          "description": "Explanation if global score differs significantly from ICEC"
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["action", "rationale"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["pursue_immediately", "explore_further", "deprioritize", "abandon"],
+          "description": "Recommended action for this idea"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Explanation of the recommendation",
+          "minLength": 100
+        },
+        "next_steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Suggested next steps if pursuing the idea"
+        }
+      }
+    }
+  }
+}

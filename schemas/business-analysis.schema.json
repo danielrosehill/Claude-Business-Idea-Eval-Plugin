@@ -1,0 +1,209 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Business Performance Analysis",
+  "description": "Schema for existing business PRGX analysis documents",
+  "type": "object",
+  "required": [
+    "business_name",
+    "business_summary",
+    "analysis_date",
+    "evaluation_type",
+    "scores",
+    "total_score",
+    "classification",
+    "detailed_analysis",
+    "recommendation"
+  ],
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "Name of the business being evaluated",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "business_summary": {
+      "type": "string",
+      "description": "Two sentence summary of the business",
+      "minLength": 10
+    },
+    "analysis_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evaluation_type": {
+      "type": "string",
+      "enum": ["business"],
+      "description": "Marks this as a business performance evaluation"
+    },
+    "evaluation_method": {
+      "type": "string",
+      "enum": ["single", "council"],
+      "description": "Whether single evaluator or council deliberation was used"
+    },
+    "business_file_path": {
+      "type": "string",
+      "description": "Relative path to the business profile file"
+    },
+    "scores": {
+      "type": "object",
+      "required": ["performance", "resilience", "growth", "contextual_fit"],
+      "properties": {
+        "performance": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Performance score: how well the business executes"
+            },
+            "reasoning": {
+              "type": "string",
+              "minLength": 50
+            }
+          }
+        },
+        "resilience": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Resilience score: ability to withstand shocks"
+            },
+            "reasoning": {
+              "type": "string",
+              "minLength": 50
+            }
+          }
+        },
+        "growth": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Growth score: realistic growth potential"
+            },
+            "reasoning": {
+              "type": "string",
+              "minLength": 50
+            }
+          }
+        },
+        "contextual_fit": {
+          "type": "object",
+          "required": ["score", "reasoning"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 10,
+              "description": "Contextual Fit: alignment with owner's current circumstances"
+            },
+            "reasoning": {
+              "type": "string",
+              "minLength": 50
+            }
+          }
+        }
+      }
+    },
+    "total_score": {
+      "type": "object",
+      "required": ["value", "formula_used"],
+      "properties": {
+        "value": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "formula_used": {
+          "type": "string",
+          "enum": ["equal_weight"]
+        },
+        "calculation": {
+          "type": "string"
+        }
+      }
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["double_down", "optimize", "restructure", "exit"]
+    },
+    "score_pattern": {
+      "type": "object",
+      "description": "Analysis of which dimensions are strong vs weak",
+      "properties": {
+        "strongest_dimension": { "type": "string" },
+        "weakest_dimension": { "type": "string" },
+        "pattern_interpretation": { "type": "string" },
+        "pattern_action": { "type": "string" }
+      }
+    },
+    "detailed_analysis": {
+      "type": "object",
+      "properties": {
+        "financial_health": {
+          "type": "string",
+          "description": "Revenue, margins, burn, unit economics assessment"
+        },
+        "operational_assessment": {
+          "type": "string",
+          "description": "Team, process maturity, infrastructure assessment"
+        },
+        "market_position": {
+          "type": "string",
+          "description": "Competitive dynamics, brand, customer base"
+        },
+        "strategic_options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "option": { "type": "string" },
+              "description": { "type": "string" },
+              "risk_level": { "type": "string", "enum": ["low", "medium", "high"] }
+            }
+          }
+        },
+        "risks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "opportunities": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "required": ["action", "rationale"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "enum": ["double_down", "optimize", "restructure", "sell", "wind_down"]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 100
+        },
+        "priority_actions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Top 3-5 things to do immediately"
+        },
+        "next_steps": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

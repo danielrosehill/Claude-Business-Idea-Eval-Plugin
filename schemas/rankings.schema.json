@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Business Ideas Rankings Database",
+  "description": "Schema for the main rankings.json file containing all evaluated business ideas",
+  "type": "object",
+  "required": ["metadata", "ideas"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["last_updated", "total_ideas", "formula_preference"],
+      "properties": {
+        "last_updated": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the rankings file was last updated"
+        },
+        "total_ideas": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of ideas evaluated"
+        },
+        "formula_preference": {
+          "type": "string",
+          "enum": ["equal_weight", "weighted"],
+          "description": "Default formula to use for ICEC calculations"
+        },
+        "version": {
+          "type": "string",
+          "description": "Schema version for migration tracking",
+          "default": "1.0.0"
+        }
+      }
+    },
+    "ideas": {
+      "type": "array",
+      "description": "Array of all evaluated business ideas, sorted by ICEC score (descending)",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "summary",
+          "idea_file",
+          "analysis_file",
+          "icec_score",
+          "classification",
+          "evaluated_date"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the idea (UUID or timestamp-based)",
+            "pattern": "^[a-zA-Z0-9-_]+$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable abbreviated name for the idea",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "summary": {
+            "type": "string",
+            "description": "Two sentence summary of the idea",
+            "minLength": 10
+          },
+          "idea_file": {
+            "type": "string",
+            "description": "Relative path to the idea markdown file in processed folder",
+            "pattern": "^input/ideas/processed/.*\\.md$"
+          },
+          "analysis_file": {
+            "type": "string",
+            "description": "Relative path to the analysis JSON file in output folder",
+            "pattern": "^output/analysis/.*\\.json$"
+          },
+          "icec_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Final aggregated ICEC score"
+          },
+          "global_score": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Optional comprehensive score incorporating qualitative dimensions"
+          },
+          "scores": {
+            "type": "object",
+            "required": ["impact", "confidence", "ease", "contextual_suitability"],
+            "description": "Individual component scores",
+            "properties": {
+              "impact": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "ease": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "contextual_suitability": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 10
+              }
+            }
+          },
+          "classification": {
+            "type": "string",
+            "enum": [
+              "strong_candidate",
+              "worth_exploring",
+              "low_priority",
+              "do_not_pursue"
+            ],
+            "description": "Overall classification based on ICEC score"
+          },
+          "evaluated_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this idea was evaluated"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional tags for categorizing ideas (e.g., 'SaaS', 'hardware', 'service')"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["evaluated", "in_progress", "pursued", "abandoned"],
+            "description": "Current status of the idea",
+            "default": "evaluated"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Optional additional notes or updates about this idea"
+          }
+        }
+      }
+    },
+    "summary_statistics": {
+      "type": "object",
+      "description": "Aggregate statistics across all evaluated ideas",
+      "properties": {
+        "average_score": {
+          "type": "number",
+          "description": "Average ICEC score across all ideas"
+        },
+        "by_classification": {
+          "type": "object",
+          "properties": {
+            "strong_candidate": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "worth_exploring": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "low_priority": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "do_not_pursue": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "top_scoring_idea": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "score": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

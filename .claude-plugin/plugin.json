@@ -1,0 +1,12 @@
+{
+  "name": "business-idea-eval",
+  "version": "1.0.0",
+  "description": "Evaluate, refine, and develop business ideas through structured lenses — VC review, TAM, B2B/B2C fit, assumptions, objections, hardware feasibility, dev specs, timelines, social impact — plus an LLM council pattern (subagents or Karpathy clone), synthesis, and Typst PDF outputs for internal and public-facing docs.",
+  "author": {
+    "name": "Daniel Rosehill",
+    "url": "https://github.com/danielrosehill"
+  },
+  "repository": "https://github.com/danielrosehill/Claude-Business-Idea-Eval-Plugin",
+  "license": "MIT",
+  "keywords": ["business", "ideation", "evaluation", "vc", "council", "synthesis"]
+}
