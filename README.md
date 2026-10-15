@@ -11,7 +11,7 @@ Successor to the `Claude-Business-Evaluator` template repo. The methodology asse
 
 ### Capture
 - `capture-idea` — text input → structured workspace, with optional executive summary, elevator pitch, technical deep-dive, and timeline variants
-- `capture-voice-idea` — audio file → transcript → structured workspace (uses `claude-transcription` plugin if installed)
+- `capture-voice-idea` — audio file → transcript → structured workspace (uses `transcription-pipeline` plugin if installed)
 
 ### Analytical lenses
 - `vc-lens` — VC-style review (market, moat, capital efficiency, exit, verdict)
