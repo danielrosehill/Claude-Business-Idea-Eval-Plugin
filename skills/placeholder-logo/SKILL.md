@@ -11,9 +11,9 @@ Generate a quick visual identity stand-in. Frame it as placeholder — not a sub
 
 1. Take the chosen working name (from `name-suggestions` or user-supplied) and a one-sentence description of the idea.
 2. Pick a generation backend in this order of preference:
-   - `fal` MCP server (`mcp__jungle-shared__fal__*`) — has multiple model options
-   - `nano-tech-diagrams` MCP server (`mcp__jungle-shared__nano-tech-diagrams__*`) — for diagram-style logos
-   - HuggingFace FLUX-1-schnell via `mcp__claude_ai_Hugging_Face__*` — fallback
+   - `fal-ai` on the MCP gateway (`mcp__gateway__fal-ai__generate_image`; `mcp__gateway__fal-ai__recommend_model` / `list_models` to pick a model) — has multiple model options
+   - `nano-tech-diagrams` MCP server (`mcp__gateway__nano-tech-diagrams__text_to_image`) — for diagram-style logos
+   - HuggingFace FLUX-1-schnell via `mcp__gateway__huggingface__FLUX_1-schnell-infer` — fallback
    Confirm with the user which backend / model they prefer.
 3. Generate **three style variants** in one pass, each as a separate prompt:
    - **Wordmark** — clean typography of the name, minimal ornamentation
