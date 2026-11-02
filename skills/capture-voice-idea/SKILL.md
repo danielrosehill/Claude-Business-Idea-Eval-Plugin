@@ -12,8 +12,8 @@ Pipeline: audio → transcript → structured idea workspace.
 1. Resolve config (workspace path, user context).
 2. Take the audio file path from the user. Verify it exists and looks like an audio file.
 3. Transcribe. Prefer the `transcription-pipeline` plugin's skills if installed:
-   - `transcription-pipeline:transcribe-gemini-cleaned` — fastest path, removes filler words
-   - `transcription-pipeline:transcribe-gemini-raw` — verbatim if the user wants every word preserved
+   - `transcription-pipeline:run-pipeline` — fastest path to a cleaned transcript (removes filler words)
+   - `transcription-pipeline:transcribe-audio` — raw, verbatim transcript if the user wants every word preserved
    - Fallback: prompt the user to install `transcription-pipeline` or supply an existing transcript.
 4. Save the raw transcript to a temp path. Show the user a short preview (first ~200 words) before proceeding.
 5. Hand the transcript to `capture-idea`:
@@ -25,5 +25,5 @@ Pipeline: audio → transcript → structured idea workspace.
 ## Notes
 
 - Voice captures often contain digressions and false starts. Prefer the cleaned transcription unless the user explicitly wants raw.
-- For long recordings (>30 min), suggest `transcription-pipeline:truncate-silence` first.
+- For long recordings (>30 min), suggest `transcription-pipeline:preprocess-audio` (VAD / silence trim) first.
 - Always preserve the original audio file in the workspace — it's the ultimate source.
