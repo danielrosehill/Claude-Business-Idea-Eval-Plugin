@@ -1,5 +1,7 @@
 # Business Idea Eval
 
+**Write-up:** [Claude Code plugins for non-coding work: homelab, data, media and admin](https://blog.danielrosehill.com/posts/claude-code-plugins-non-coding-workflows-xlkdop/)
+
 Claude Code plugin for evaluating, refining, and developing business ideas. Capture an idea (text or voice), apply structured analytical lenses, run an LLM-council deliberation, synthesise the findings, and export polished documents — internal or public-facing — plus a placeholder logo and name suggestions.
 
 Successor to the `Claude-Business-Evaluator` template repo. The methodology assets (ICEC scorecard, PRGX scorecard, six-persona council) are ported into this plugin's `reference/` directory.
