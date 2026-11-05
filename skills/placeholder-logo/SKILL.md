@@ -12,7 +12,7 @@ Generate a quick visual identity stand-in. Frame it as placeholder — not a sub
 1. Take the chosen working name (from `name-suggestions` or user-supplied) and a one-sentence description of the idea.
 2. Pick a generation backend in this order of preference:
    - fal REST queue API (`POST https://queue.fal.run/fal-ai/nano-banana-2` with `Authorization: Key $FAL_KEY`, poll `status_url`, GET `response_url`; run under `with-secrets`; full recipe in the `ai-graphics` skill of the Image-Production plugin). Pick another model with `GET https://api.fal.ai/v1/models?q=<words>`. `fal-ai/nano-banana-2` suits text-heavy marks.
-   - Hugging Face FLUX.1-schnell, fallback: `curl -s https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell -H "Authorization: Bearer $HF_TOKEN" -H "Content-Type: application/json" -d '{"inputs":"<prompt>"}' -o logo.png` under `with-secrets` (returns image bytes; check `hf auth whoami` if it returns 401)
+   - Hugging Face FLUX.1-schnell, fallback (billed to the HF account, served by fal): `curl -s https://router.huggingface.co/fal-ai/fal-ai/flux/schnell -H "Authorization: Bearer $HF_TOKEN" -H "Content-Type: application/json" -d '{"prompt":"<prompt>"}' | jq -r '.images[0].url' | xargs curl -s -o logo.jpg` under `with-secrets` (returns JSON with an image URL; check `hf auth whoami` if it returns 401). The older `hf-inference` route returns 410 for this model (2026-11-05).
    Confirm with the user which backend / model they prefer.
 3. Generate **three style variants** in one pass, each as a separate prompt:
    - **Wordmark** — clean typography of the name, minimal ornamentation
